@@ -4,20 +4,33 @@ RUN apt-get update \
 && apt-get upgrade -y \
 && apt-get install -y --no-install-recommends apt-utils tree apache2 curl vim \
 && rm -rf /var/lib/apt/lists/*
+# apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; 
 
 COPY infra/apache/domain1.conf /etc/apache2/sites-available/domain1.conf
 COPY infra/apache/fqdn.conf /etc/apache2/conf-available/fqdn.conf
 COPY infra/apache/devopsnation.co.uk.conf /etc/apache2/sites-available/devopsnation.co.uk.conf
 COPY infra/ssl/. /etc/apache2/ssl/.
 
+COPY infra/apache/rproxy.conf /etc/apache2/conf-available/rproxy.conf
+COPY infra/apache/environment.conf /etc/apache2/conf-available/environment.conf
+
+COPY infra/apache/start_script.sh /.
+
 RUN a2enmod proxy proxy_http && \
 a2dissite 000-default \
 && a2ensite domain1 devopsnation.co.uk \
 && a2enconf fqdn \
-&& a2enmod ssl
+&& a2enconf rproxy \
+&& a2enmod ssl \
+&& chmod +x /start_script.sh
+
 
 EXPOSE 80
 EXPOSE 443
 
-CMD ["apache2ctl", "-D", "FOREGROUND"]
-
+#CMD ["apache2ctl", "-D", "FOREGROUND"]
+#CMD ["apache2ctl", "-D", "DEVOPSNATION"]
+#ENTRYPOINT ["apache2ctl"]
+#CMD ["-D", "devopsnation"]
+#CMD ["/usr/sbin/apache2ctl", "-Ddevopsnation"]
+ENTRYPOINT ["/start_script.sh"]
