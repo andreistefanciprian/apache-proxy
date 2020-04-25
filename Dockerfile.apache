@@ -21,3 +21,4 @@ EXPOSE 80
 EXPOSE 443
 
 CMD ["apache2ctl", "-D", "FOREGROUND"]
+#CMD ["apache2ctl", "-D", "devopsnation.co.uk"]
