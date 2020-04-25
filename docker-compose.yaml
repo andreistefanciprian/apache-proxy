@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+
+  nodeapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nodeapp:$VERSION
+    container_name: nodeapp
+    ports:
+      - 3000:3000
+    networks:
+      - node-net
+
+  apache:
+    build:
+      context: .
+      dockerfile: Dockerfile.apache
+    image: apache:$VERSION
+    container_name: apache
+    ports:
+        - 443:443
+        - 80:80
+    networks:
+        - node-net
+
+networks:
+  node-net:
