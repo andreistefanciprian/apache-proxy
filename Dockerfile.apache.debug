@@ -12,8 +12,8 @@ COPY infra/apache/website.conf /etc/apache2/sites-available/website.conf
 COPY infra/ssl/. /etc/apache2/ssl/.
 
 COPY infra/apache/ssl_page.conf /etc/apache2/conf-available/ssl_page.conf
-COPY infra/apache/environment.conf /etc/apache2/conf-available/environment.conf
-#COPY infra/apache/environment.conf /etc/apache2/environment.conf
+COPY infra/apache/environment_ssl.conf /etc/apache2/conf-available/environment_ssl.conf
+#COPY infra/apache/environment_ssl.conf /etc/apache2/environment_ssl.conf
 
 #COPY infra/apache/start_script.sh /.
 

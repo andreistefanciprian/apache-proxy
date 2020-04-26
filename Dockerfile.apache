@@ -9,15 +9,17 @@ COPY infra/apache/default_website.conf /etc/apache2/sites-available/default_webs
 COPY infra/apache/fqdn.conf /etc/apache2/conf-available/fqdn.conf
 COPY infra/apache/website.conf /etc/apache2/sites-available/website.conf
 COPY infra/ssl/. /etc/apache2/ssl/.
-COPY infra/apache/environment.conf /etc/apache2/conf-available/environment.conf
+COPY infra/apache/environment_ssl.conf /etc/apache2/conf-available/environment_ssl.conf
 COPY infra/apache/ssl_page.conf /etc/apache2/conf-available/ssl_page.conf
+COPY infra/apache/environment_nossl.conf /etc/apache2/conf-available/environment_nossl.conf
+COPY infra/apache/index.html /var/www/html/index.html
 
-RUN a2enmod proxy proxy_http && \
-a2dissite 000-default \
-&& a2ensite default_website \
+RUN a2enmod proxy proxy_http \
 && a2enconf fqdn \
+&& a2enmod ssl \
 && a2enconf ssl_page \
-&& a2enmod ssl
+&& a2dissite 000-default \
+&& a2ensite default_website
 
 EXPOSE 80
 EXPOSE 443
