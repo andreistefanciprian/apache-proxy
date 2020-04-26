@@ -13,7 +13,9 @@ CMD ["apache2ctl", "-DFOREGROUND"]
 ```
 
 ## Prerequisites
+
 Have docker engine running on your machine.
+
 Have SSL certs available in the infra/ssl folder (included in .gitignore).
 
 ## How to start this setup with build.sh script
@@ -58,6 +60,7 @@ VERSION=$VERSION docker-compose down
 ```
 
 ## Container Debug && Cleanup commands
+
 ```bash
 # run container
 docker container run -it --rm -p 443:443 -p 80:80 --network web-server_node-net --name apache-test apache:0.0.17 bash
