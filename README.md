@@ -12,6 +12,10 @@ CMD ["apache2ctl", "-DFOREGROUND", "-DDEVOPSNATION"]
 CMD ["apache2ctl", "-DFOREGROUND"]
 ```
 
+## Prerequisites
+Have docker engine running on your machine.
+Have SSL certs available in the infra/ssl folder (included in .gitignore).
+
 ## How to start this setup with build.sh script
 
 ```bash
