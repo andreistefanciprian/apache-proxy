@@ -5,19 +5,25 @@ RUN apt-get update \
 && apt-get install -y --no-install-recommends apt-utils tree apache2 curl vim \
 && rm -rf /var/lib/apt/lists/*
 
-COPY infra/apache/domain1.conf /etc/apache2/sites-available/domain1.conf
+COPY infra/apache/default_website.conf /etc/apache2/sites-available/default_website.conf
 COPY infra/apache/fqdn.conf /etc/apache2/conf-available/fqdn.conf
-COPY infra/apache/devopsnation.co.uk.conf /etc/apache2/sites-available/devopsnation.co.uk.conf
+COPY infra/apache/website.conf /etc/apache2/sites-available/website.conf
 COPY infra/ssl/. /etc/apache2/ssl/.
+COPY infra/apache/environment.conf /etc/apache2/conf-available/environment.conf
+COPY infra/apache/ssl_page.conf /etc/apache2/conf-available/ssl_page.conf
 
 RUN a2enmod proxy proxy_http && \
 a2dissite 000-default \
-&& a2ensite domain1 devopsnation.co.uk \
+&& a2ensite default_website \
 && a2enconf fqdn \
+&& a2enconf ssl_page \
 && a2enmod ssl
 
 EXPOSE 80
 EXPOSE 443
 
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+# Start HTTPS page
+CMD ["apache2ctl", "-DFOREGROUND", "-DDEVOPSNATION"]
 
+# Start only HTTP page
+#CMD ["apache2ctl", "-DFOREGROUND"]

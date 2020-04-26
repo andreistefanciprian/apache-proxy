@@ -6,23 +6,25 @@ RUN apt-get update \
 && rm -rf /var/lib/apt/lists/*
 # apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; 
 
-COPY infra/apache/domain1.conf /etc/apache2/sites-available/domain1.conf
+COPY infra/apache/default_website.conf /etc/apache2/sites-available/default_website.conf
 COPY infra/apache/fqdn.conf /etc/apache2/conf-available/fqdn.conf
-COPY infra/apache/devopsnation.co.uk.conf /etc/apache2/sites-available/devopsnation.co.uk.conf
+COPY infra/apache/website.conf /etc/apache2/sites-available/website.conf
 COPY infra/ssl/. /etc/apache2/ssl/.
 
-COPY infra/apache/rproxy.conf /etc/apache2/conf-available/rproxy.conf
+COPY infra/apache/ssl_page.conf /etc/apache2/conf-available/ssl_page.conf
 COPY infra/apache/environment.conf /etc/apache2/conf-available/environment.conf
+#COPY infra/apache/environment.conf /etc/apache2/environment.conf
 
-COPY infra/apache/start_script.sh /.
+#COPY infra/apache/start_script.sh /.
 
 RUN a2enmod proxy proxy_http && \
 a2dissite 000-default \
-&& a2ensite domain1 devopsnation.co.uk \
+&& a2ensite default_website website \
 && a2enconf fqdn \
-&& a2enconf rproxy \
+&& a2enconf ssl_page \
 && a2enmod ssl \
-&& chmod +x /start_script.sh
+&& a2enmod status
+#&& chmod +x /start_script.sh
 
 
 EXPOSE 80
@@ -33,4 +35,5 @@ EXPOSE 443
 #ENTRYPOINT ["apache2ctl"]
 #CMD ["-D", "devopsnation"]
 #CMD ["/usr/sbin/apache2ctl", "-Ddevopsnation"]
-ENTRYPOINT ["/start_script.sh"]
+#ENTRYPOINT ["/start_script.sh"]
+CMD ["apache2ctl", "-DFOREGROUND", "-DDEVOPSNATION"]
