@@ -23,6 +23,17 @@ bash build.sh
 
 # cleanup containers
 bash build.sh down
+
+# Access webserver
+curl localhost:80/
+curl localhost:443/load
+curl localhost:443/status
+
+# pages available insode nodejs app
+/
+/500
+/load
+/status
 ```
 
 ## How to start this setup with docker commands (optional)
